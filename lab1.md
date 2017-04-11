@@ -1,7 +1,7 @@
 
 $$p( t ) = 200m - ( 4.9 m/s^2 ) * t^2$$
 
-# 1
+# 1.1.1
 
 $$\begin{align}
   p(3 s) &= \begin{aligned}[t] &
@@ -23,7 +23,7 @@ $$\begin{align}
 
 p(3 s) represents the height of the height of the object three seconds after being dropped. p(5 s) represents the height of the height of the object five seconds after being dropped.
 
-# 2
+# 1.1.2
 
 $$
   \frac{p(5s) − p(3s)}{5s − 3s} = -39.2 m/s^2
@@ -31,7 +31,7 @@ $$
 
 The result represents the object's average velocity between time 3s and 5s.
 
-# 3
+# 1.1.3
 
 $$\begin{align}
   \frac
@@ -73,7 +73,7 @@ $$
   g(t_0, t_1) = −4.9t_1 − 4.9t_0
 $$
 
-# 4
+# 1.1.4
 
 $$
     \frac
@@ -94,7 +94,7 @@ $$\begin{align}
   \end{aligned}
 \end{align}$$
 
-# 5
+# 1.1.5
 
 | $t_1 / s$    | $g(3, t_1) / (m/s)$ |
 | :----------- | :---------------- |
@@ -107,6 +107,6 @@ $$\begin{align}
 | 3.01         | -29.449           |
 | 3.1          | -29.89            |
 
-# 6
+# 1.1.6
 
 Values for $g(3 s, t_1)$ seem to converge on $-29.4 m/s$ as $t_1$ approaches 3. That must be the instantaneous velocity when $t = 3 s$.
