@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+    <style media="screen">
+        .theorem {
+            background-color: #eee;
+        }
+
+        .theorem>p {
+            padding: 1rem;
+        }
+
+        body {
+            margin: 10%;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>2.6</h2>
+
+    <section>
+
+        <h3>2.6.1</h3>
+
+        <p/>`lim_(t->oo) (4t^2)/(4t^2 + t^3)`
+
+        <p/>`= lim_(t->oo) (4t)/(4t + t^2)`
+
+        <p/>`= lim_(t->oo) 4/(4 + t)`
+
+        <p/>`= 0` using R3
+
+    </section>
+    <section>
+
+        <h3>2.6.2</h3>
+
+        <p/>`lim_(t->oo) (6e^t + 10e^(2t))/(2e^(2t))`
+
+        <p/>`= lim_(t->oo) (6 + 10e^t)/(2e^t)`
+
+        <p/>`= lim_(t->oo) (3 + 5e^t)/(e^t)`
+
+        <p/>`= lim_(t->oo) (3/e^t + 5)/(1)`
+
+        <p/>`= lim_(t->oo) 3/e^t + 5`
+
+        <p/>`= lim_(t->oo) 3/e^t + lim_(t->oo) 5` using A1
+
+        <p/>`= 0 + 5` using R2, R3
+
+        <p/>`= 5`
+
+    </section>
+    <section>
+
+        <h3>2.6.3</h3>
+
+        <p/>`lim_(y->oo) sqrt((4y + 5)/(5 + 9y))`
+
+        <p/>`= lim_(y->oo) sqrt((4 + 5/y)/(5/y + 9))`
+
+        <p/>`= sqrt(lim_(y->oo) (4 + 5/y)/(5/y + 9))` using A6
+
+        <p/>`= sqrt((lim_(y->oo) 4 + 5/y)/(lim_(y->oo) 5/y + 9))` using A5
+
+        <p/>`= sqrt(((lim_(y->oo) 5/y) + 4)/((lim_(y->oo) 5/y) + 9))` using A6
+
+        <p/>`= sqrt((0 + 4)/(0 + 9))` using R3
+
+        <p/>`= 2/3`
+
+    </section>
+
+</body>
+
+</html>
