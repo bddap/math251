@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.12.1/math.min.js"></script>
+    <!-- load http://maurizzzio.github.io/function-plot/ -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://wzrd.in/standalone/function-plot@1.17.3"></script>
+
+    <style media="screen">
+        .theorem {
+            background-color: #eee;
+        }
+
+        .theorem>p {
+            padding: 1rem;
+        }
+
+        body {
+            margin: 10%;
+            font-family: sans-serif;
+        }
+
+        td {
+          padding-right: 1rem;
+        }
+    </style>
+
+    <script type="text/javascript">
+        class FunctionPlot extends HTMLElement {
+            static get observedAttributes() {
+                return ['fn'];
+            }
+            attributeChangedCallback(attr, oldValue, newValue) {
+                if (attr == 'fn') {
+                    functionPlot({
+                        target: this,
+                        title: newValue,
+                        data: [{
+                            fn: newValue
+                            // ,
+                            // graphType: 'polyline',
+                            // sampler: 'builtIn'
+                        }]
+                    })
+                }
+            }
+        }
+        customElements.define('function-plot', FunctionPlot);
+    </script>
+
+    <script type="text/javascript">
+        function showTable(table) {
+            const scriptTag = document.scripts[document.scripts.length - 1];
+            const parent = scriptTag.parentNode;
+            const t = document.createElement('table');
+            parent.appendChild(t);
+            table.forEach((row, i) => {
+                const r = t.insertRow(i);
+                row.forEach((cell, j) => {
+                    r.insertCell(j).textContent = cell;
+                });
+            });
+        }
+    </script>
+
+    <script>
+        setTimeout(() => {
+            location.reload()
+        }, 200000)
+    </script>
+</head>
+
+<body>
+
+    <h2>2.9</h2>
+
+    <h3>2.9.1</h3>
+
+    <script>
+        showTable([
+            ["a", "h(a)", "lim_(t->a^-) h(t)", "lim_(t->a^+) h(t)", "lim_(t->a) h(t)"],
+            [-4,4,1,4,'"undefined"'],
+            [-1,'"undefined"',3,3,3],
+            [2,-3,0,0,0],
+            [3,-1,-1,-1,-1],
+            [5,'"undefined"','oo','oo','oo']
+        ].map(r => r.map(c => '`' + c + '`')))
+    </script>
+
+    <h3>2.9.2</h3>
+
+    <p>-4, [2]</p>
+    <p>-1, [1, 3]</p>
+    <p>2, [3]</p>
+    <p>5, [1, 3]</p>
+
+</body>
+
+</html>
