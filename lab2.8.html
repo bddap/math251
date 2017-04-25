@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.12.1/math.min.js"></script>
+    <!-- load http://maurizzzio.github.io/function-plot/ -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://wzrd.in/standalone/function-plot@1.17.3"></script>
+
+    <style media="screen">
+        .theorem {
+            background-color: #eee;
+        }
+
+        .theorem>p {
+            padding: 1rem;
+        }
+
+        body {
+            margin: 10%;
+            font-family: sans-serif;
+        }
+    </style>
+
+    <script type="text/javascript">
+        class FunctionPlot extends HTMLElement {
+            static get observedAttributes() {
+                return ['fn'];
+            }
+            attributeChangedCallback(attr, oldValue, newValue) {
+                if (attr == 'fn') {
+                    functionPlot({
+                        target: this,
+                        title: newValue,
+                        data: [{
+                            fn: newValue
+                            // ,
+                            // graphType: 'polyline',
+                            // sampler: 'builtIn'
+                        }]
+                    })
+                }
+            }
+        }
+        customElements.define('function-plot', FunctionPlot);
+    </script>
+
+    <script type="text/javascript">
+        function showTable(table) {
+            const scriptTag = document.scripts[document.scripts.length - 1];
+            const parent = scriptTag.parentNode;
+            const t = document.createElement('table');
+            parent.appendChild(t);
+            table.forEach((row, i) => {
+                const r = t.insertRow(i);
+                row.forEach((cell, j) => {
+                    r.insertCell(j).textContent = cell;
+                });
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+    <h2>2.8 Vertical Asymptotes</h2>
+
+    <section>
+
+        <p>Suppose `g(t) = (t+4)/(t+3)`</p>
+
+        <h3>2.8.1 What is the vertical asymptote on the graph of `y=g(t)`</h3>
+
+        <p>`-3`</p>
+
+        <function-plot fn="(x+4)/(x+3)" />
+
+        <h3>2.8.2 Write an equality about `lim_(t->-3^-) g(t)`.</h3>
+
+        <p>`lim_(t->-3^-) g(t) = -oo`</p>
+
+        <h3>2.8.3 Write an equality about `lim_(t->-3^+) g(t)`.</h3>
+
+        <p>`lim_(t->-3^+) g(t) = oo`</p>
+
+        <h3>2.8.4</h3>
+
+        <p style="font-family: cursive">Nope</p>
+
+        <h3>2.8.5</h3> That is trick question. None of those limits exist.
+
+    </section>
+
+    <section>
+
+        <p>Suppose that `z(x) = (7 - 3x^2) / (x - 2)`.</p>
+
+        <h3>2.8.6 What is the vertical asymptote on the graph of `y(x) = z(x)`</h3>
+
+        <p>`2`</p>
+
+        <function-plot fn="(7 - 3x^2) / (x - 2)" />
+
+        <h3>2.8.7</h3>
+
+        <p>Not possible.</p>
+
+        <h3>2.8.8</h3>
+
+        <p>`z` has no horizontal asymtote.</p>
+
+        <h3>2.8.9</h3> None of the above limits exist.
+
+    </section>
+
+    <h3>2.8.10</h3>
+
+    <p>
+        <script>
+            showTable(
+                [
+                    ["`x`", "`x + 7`", "`x - 8`", "`(x + 7) / (x - 8)`"]
+                ].concat(
+                    [8.1, 8.01, 8.001, 8.0001].map(x => [x, x + 7, x - 8, (x + 7) / (x - 8)])
+                ))
+        </script>
+    </p>
+
+    <p>`"not zero"/0` approaches a different infinity dependong on the direction of the approach.</p>
+
+    <section>
+
+        <h3>2.8.11</h3>
+
+        <p>False. Form is `"zero"/"zero"`.</p>
+
+        <h3>2.8.12</h3>
+
+        <p>False. Form is `"non-zero real number"/"zero"`.</p>
+
+        <h3>2.8.13</h3>
+
+        <p>True.</p>
+
+        <h3>2.8.14</h3>
+
+        <!-- <function-plot fn="2^x - ln(x)" /> -->
+
+        <p>False, I think.</p>
+
+        <h3>2.8.15</h3>
+
+        <p>False. Form is `"infinity"/"infinity"`</p>
+
+        <h3>2.8.16</h3>
+
+        <p>False. Form is `"infinity"/"infinity"`</p>
+
+        <h3>2.8.17</h3>
+
+        <p>True. Form is `"indeterminate"/"indeterminate"`?</p>
+
+        <h3>2.8.18</h3>
+
+        <p>True... maybe.</p>
+
+    </section>
+
+    <h3>2.8.19</h3>
+
+    <p>Form is `"non zero real number"/"zero"` when A5 is applied. A5 can't be applied to that form.</p>
+
+    <p>`lim_(x->6^+) 4/(x-6) = lim_(x->6^+) (4/x)/(1-6/x)`</p>
+
+</body>
+
+</html>
