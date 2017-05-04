@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title></title>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.12.1/math.min.js"></script>
+  <!-- load http://maurizzzio.github.io/function-plot/ -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="https://wzrd.in/standalone/function-plot@1.17.3"></script>
+
+  <style media="screen">
+    .theorem {
+      background-color: #eee;
+    }
+
+    .theorem>p {
+      padding: 1rem;
+    }
+
+    body {
+      margin: 10%;
+      font-family: sans-serif;
+    }
+
+    td {
+      padding-right: 1rem;
+    }
+  </style>
+
+  <script type="text/javascript">
+    class FunctionPlot extends HTMLElement {
+      static get observedAttributes() {
+        return ['fn'];
+      }
+      attributeChangedCallback(attr, oldValue, newValue) {
+        if (attr == 'fn') {
+          functionPlot({
+            target: this,
+            title: newValue,
+            data: [{
+              fn: newValue
+              // ,
+              // graphType: 'polyline',
+              // sampler: 'builtIn'
+            }]
+          })
+        }
+      }
+    }
+    customElements.define('function-plot', FunctionPlot);
+  </script>
+
+  <script type="text/javascript">
+    function showTable(table) {
+      const scriptTag = document.scripts[document.scripts.length - 1];
+      const parent = scriptTag.parentNode;
+      const t = document.createElement('table');
+      parent.appendChild(t);
+      table.forEach((row, i) => {
+        const r = t.insertRow(i);
+        row.forEach((cell, j) => {
+          r.insertCell(j).textContent = cell;
+        });
+      });
+    }
+  </script>
+
+  <script>
+    setTimeout(() => {
+      location.reload()
+    }, 200000)
+  </script>
+</head>
+
+<body>
+
+  <h2>2.12 Discontinuous Formulas</h2>
+
+  <p>Discontinuities are a little more challenging to identify when working with formulas than when working with graphs. One reason for the added difficulty is that when working with a function formula you have to dig into your memory bank and retrieve fundamental
+    properties about certain types of functions.</p>
+
+  <h3>2.12.1</h3>
+
+  <p>What would cause a discontinuity on a rational function (a polynomial divided by another polynomial)?</p>
+
+  <p>There will be an discontinuity wherever the denominator is zero.</p>
+
+  <h3>2.12.2</h3>
+
+  <p>If `y` is a function of `u`, defined by `y(u)=ln(u)`, what is always true about the argument of the function, `u`, over intervals where the function is continuous?</p>
+
+  <p>`u > 0`</p>
+
+  <h3>2.12.3</h3>
+
+  <p>Name three values of `theta` where the function `tan(theta)` is discontinuous.</p>
+
+  <function-plot fn="tan(x)"/>
+
+  <p>`{pi/2 + x pi : x in ZZ}`</p>
+
+  <h3>2.12.4</h3>
+
+  <p>What is the domain of the function `k`, where `k(t)=sqrt(t-4)`?</p>
+
+  <function-plot fn="sqrt(x-4)"/>
+
+  <p>[4, oo)</p>
+
+  <h3>2.12.5</h3>
+
+  <p>What is the domain of the function `g`, where `g(t) = root 3 (t-4)`?</p>
+
+  `(-oo, oo)`
+
+</body>
+
+</html>
