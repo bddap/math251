@@ -1,38 +1,43 @@
-
-# import matplotlib.pyplot as plt
-#
-#
-# def lc(fn='HPI_master.csv'):
-#     return [line.strip('\r\n').strip(',').split(',') for line in open(fn) if line][1:]
-#
-# d = lc()
-#
-# (hpi_type, hpi_flavor, frequency, level, place_name, place_id, yr, period,
-#  index_nsa, index_sa) = range(10)
-#
-# # print([float(line[yr]) for line in d])
-# for l in d:
-#     print(len(l))
-#
-
-
 import csv
 import matplotlib.pyplot as plt
 
-d = list(csv.reader(open('HPI_master.csv'), quoting=csv.QUOTE_MINIMAL))[1:-1]
-d = [line for line in d if all(line)]
 
-(
-    hpi_type, hpi_flavor, frequency, level, place_name, place_id, yr, period,
-    index_nsa, index_sa
-) = range(10)
+def ds(hpi, label):
+    d = list(csv.DictReader(open('HPI_master.csv'), quoting=csv.QUOTE_MINIMAL))
 
-d = [line for line in d if line[place_id] == "OR"]
-purchaseOnly = [l for l in d if l[hpi_flavor] == 'purchase-only']
-expandedData = [l for l in d if l[hpi_flavor] == 'expanded-data']
+    # only oregon
+    d = [l for l in d if l['place_id'] == 'OR']
 
-plt.plot(
-    [float(line[yr]) for line in purchaseOnly],
-    [float(line[index_sa]) for line in purchaseOnly]
-)
+    d = [l for l in d if (l['hpi_type'], l['hpi_flavor']) == hpi]
+
+    for l in d:
+        # all our data is state level now
+        del l['level']
+        # all our frequencies are quarterly
+        del l['frequency']
+        # place_name and place_id are always Oregon and OR
+        del l['place_name']
+        del l['place_id']
+        # hpi_type and hpi_flavor are always traditional all-transactions
+        del l['hpi_type']
+        del l['hpi_flavor']
+
+        # use only one axis for time
+        l['yr'] = float(l['yr']) + (float(l['period']) - 1) / 4
+        del l['period']
+
+        # index_sa is not always defined
+        del l['index_sa']
+
+    plt.plot(
+        [float(l['yr']) for l in d],
+        [float(l['index_nsa']) for l in d],
+        label=label
+    )
+
+
+for hpi in [('traditional', 'expanded-data'), ('traditional', 'all-transactions'), ('traditional', 'purchase-only'), ('non-metro', 'all-transactions')]:
+    ds(hpi, str(hpi))
+
+plt.legend()
 plt.show()
