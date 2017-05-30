@@ -8,6 +8,10 @@
     html {
       font-family: sans-serif;
     }
+    
+    body {
+      margin: 5vw;
+    }
 
     table {
       border-collapse: collapse;
@@ -37,8 +41,8 @@
   <h2>Math 251 Project Presentation</h2>
   <!-- <p>Slope of a secant lines for a data set compared to the derivative of a regression of the data set</p> -->
 
-  <!-- <h2>Introduction 25%</h2>
-  <p>Clear description of the topic and data including units/scale. How it was chosen and a clear and compelling description of why it was chosen.</p> -->
+  <h2>Introduction</h2>
+  <!--25% <p>Clear description of the topic and data including units/scale. How it was chosen and a clear and compelling description of why it was chosen.</p> -->
 
   <p>This project examines Oregon home pricing data from <a href="https://catalog.data.gov/dataset/fhfa-house-price-indexes-hpis">data.gov</a>. I chose this topic because my wife and I want to buy a house sometime. Ideally we want to buy when prices are
     at a local minima. Perhaps this dataset will provide some useful insight.</p>
@@ -47,14 +51,13 @@
 
   <p>The data is arranged such that the x axis represents year, and the y axis represents average home price in thousands.</p>
 
-  <!-- <h2>Presentation of Data 25%</h2>
-  <p>Data is presented in table and graphic form following the Writing Guidelines including appropriate scales/column headings, units and fig. reference notation. Slope of secant line correctly found for at least one point.</p> -->
+  <h2>Presentation of Data</h2>
+  <!-- 25% <p>Data is presented in table and graphic form following the Writing Guidelines including appropriate scales/column headings, units and fig. reference notation. Slope of secant line correctly found for at least one point.</p> -->
 
-  <p>Figure 1.1.1 shows the entire data set.</p>
-
+  <!-- Data is presented in table -->
   <figure>
     <figcaption>
-      Figure 1.1.1. Source data.
+      Figure 1.1.1. HPI Data as a Table.
       <button onclick="
         e = document.getElementById('data_table');
         e.hidden = !e.hidden;
@@ -74,8 +77,9 @@
     </script>
   </figure>
 
+  <!-- and graphic form -->
   <figure>
-    <figcaption>Figure 1.1.2. Plot of source data.</figcaption>
+    <figcaption>Figure 1.1.2. HPI Data as a Graph.</figcaption>
     <canvas id="initial_plot"></canvas>
     <script>
       index.loadPrices()
@@ -117,11 +121,11 @@
     </script>
   </figure>
 
-  <!-- <h2>Regression 25%</h2>
-  <p>Several regressions of the data were correctly performed and are presented. Logical and complete reasons for best choice are given including long- and short-run behavior and limitations.</p> -->
+  <h2>Regression</h2>
+  <!-- 25% <p>Several regressions of the data were correctly performed and are presented. Logical and complete reasons for best choice are given including long- and short-run behavior and limitations.</p> -->
 
-  <!-- <h2>Conclusion 25%</h2>
-  <p>Results of data and regression calculations correctly interpreted. Shortcoming of the method are addressed and limitations of choices discussed.</p> -->
+  <h2>Conclusion</h2>
+  <!-- 25% <p>Results of data and regression calculations correctly interpreted. Shortcoming of the method are addressed and limitations of choices discussed.</p> -->
 
   <!-- <p>Grade Calculated (Max is 95% plus up to 5pts for Wow! Points) using the following formula: 50 + 3.75*(Intro+Data+Domain+Incresaing)+WowPoints</p> -->
 
