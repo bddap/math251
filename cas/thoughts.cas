@@ -1,0 +1,27 @@
+[^ `] -> [a b] [a ^ [b - 1] * b]
+[+ `] -> [a b] [a ` + [b `]]
+[- `] -> [a b] [a ` - [b `]]
+[* `] -> [a b] [a * [b `] + [a ` * b]]
+[/ `] -> [a b] [a ` * b - [b ` * a] / [b ^ 2]]
+` -> [a b c] [a [b `] c]
+
+where [a] [
+  [a ^ [b - 1] * b]               if [f = ^]
+  [a ` + [b `]]                   if [f = +]
+  [a ` - [b `]]                   if [f = -]
+  [a * [b `] + [a ` * b]]         if [f = *]
+  [a ` * b - [b ` * a] / [b ^ 2]] if [f = /]
+  [a f b]
+]
+where [] []
+
+where [a] [
+  [a f b]
+  unless [f = ^] [a ^ [b - 1] * b]
+  unless [f = +] [a ` + [b `]]
+  unless [f = -] [a ` - [b `]]
+  unless [f = *] [a * [b `] + [a ` * b]]
+  unless [f = /] [a ` * b - [b ` * a] / [b ^ 2]]
+]
+
+where [a [+ `] b] []

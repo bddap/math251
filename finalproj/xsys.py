@@ -1,17 +1,43 @@
-
 import csv
+import json
+import sys
 
-d = list(csv.reader(open('HPI_master.csv'), quoting=csv.QUOTE_MINIMAL))[1:-1]
-d = [line for line in d if all(line)]
+def ds():
+    d = list(csv.DictReader(open('HPI_master.csv'), quoting=csv.QUOTE_MINIMAL))
 
-(
-    hpi_type, hpi_flavor, frequency, level, place_name, place_id, yr, period,
-    index_nsa, index_sa
-) = range(10)
+    # only oregon
+    d = [l for l in d if l['place_id'] == 'OR']
 
-d = [line for line in d if line[place_id] == "OR"]
-purchaseOnly = [l for l in d if l[hpi_flavor] == 'purchase-only']
-expandedData = [l for l in d if l[hpi_flavor] == 'expanded-data']
+    d = [l for l in d if
+        (l['hpi_type'], l['hpi_flavor']) == ('traditional', 'all-transactions')]
 
-print(*(float(line[yr]) for line in purchaseOnly))
-print(*(float(line[index_sa]) for line in purchaseOnly))
+    for l in d:
+        # all our data is state level now
+        del l['level']
+        # all our frequencies are quarterly
+        del l['frequency']
+        # place_name and place_id are always Oregon and OR
+        del l['place_name']
+        del l['place_id']
+        # hpi_type and hpi_flavor are always traditional all-transactions
+        del l['hpi_type']
+        del l['hpi_flavor']
+
+        # use only one axis for time
+        l['yr'] = float(l['yr']) + (float(l['period']) - 1) / 4
+        del l['period']
+
+        # index_sa is not always defined
+        del l['index_sa']
+
+    return list(zip(
+        [float(l['yr']) for l in d],
+        [float(l['index_nsa']) for l in d]
+    ))
+
+if __name__ == '__main__':
+    json.dump([
+        {'x': x, 'y': y} for x, y in ds()
+    ], sys.stdout)
+
+# python3 xsys.py | jq . > site/prices.json
