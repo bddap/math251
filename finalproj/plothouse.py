@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+
+
 import csv
 import matplotlib.pyplot as plt
 
 
-def ds(hpi, label):
+def ds(hpi = ('traditional', 'expanded-data')):
     d = list(csv.DictReader(open('HPI_master.csv'), quoting=csv.QUOTE_MINIMAL))
 
     # only oregon
@@ -29,15 +32,13 @@ def ds(hpi, label):
         # index_sa is not always defined
         del l['index_sa']
 
-    plt.plot(
+    return (
         [float(l['yr']) for l in d],
-        [float(l['index_nsa']) for l in d],
-        label=label
+        [float(l['index_nsa']) for l in d]
     )
 
-
-for hpi in [('traditional', 'expanded-data'), ('traditional', 'all-transactions'), ('traditional', 'purchase-only'), ('non-metro', 'all-transactions')]:
-    ds(hpi, str(hpi))
-
-plt.legend()
-plt.show()
+if __name__ == '__main__':
+    d = ds()
+    plt.plot(*d, label="Housing prices in Oregon.")
+    plt.legend()
+    plt.show()
