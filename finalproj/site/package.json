@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "beefy index.js --live"
+    "serve": "beefy index.js --live -- -r chart.js -r ./index.js:index"
   },
   "author": "Andrew Dirksen",
   "license": "ISC",
   "devDependencies": {
     "beefy": "^2.1.8",
     "browserify": "^14.4.0",
-    "chart": "^0.1.2",
+    "chart.js": "^2.6.0",
     "watchify": "^3.9.0"
-  }
+  },
+  "dependencies": {}
 }
