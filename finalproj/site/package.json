@@ -13,6 +13,7 @@
     "beefy": "^2.1.8",
     "browserify": "^14.4.0",
     "chart.js": "^2.6.0",
+    "elparser": "0.0.9",
     "watchify": "^3.9.0"
   },
   "dependencies": {}

@@ -8,7 +8,7 @@
     html {
       font-family: sans-serif;
     }
-    
+
     body {
       margin: 5vw;
     }
@@ -27,6 +27,13 @@
       margin-top: 1rem;
       margin-bottom: 1rem;
       font-weight: bold;
+    }
+
+    .nice_input {
+      min-height: 5em;
+      padding: 1em;
+      font-size: inherit;
+      resize: none;
     }
   </style>
 
@@ -80,49 +87,46 @@
   <!-- and graphic form -->
   <figure>
     <figcaption>Figure 1.1.2. HPI Data as a Graph.</figcaption>
-    <canvas id="initial_plot"></canvas>
+    <canvas hidden id="initial_plot"></canvas>
     <script>
-      index.loadPrices()
-        .then(prices => {
-          new Chart("initial_plot", {
-            type: 'line',
-            data: {
-              datasets: [{
-                label: 'Source Data',
-                data: prices
-              }]
-            },
-            options: {
-              responsive: true,
-              title: {
-                display: true,
-                text: 'House Pricing Index Oregon'
-              },
-              scales: {
-                xAxes: [{
-                  type: 'linear',
-                  display: true,
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Year'
-                  }
-                }],
-                yAxes: [{
-                  display: true,
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Average Price in Thousands of Dollars'
-                  }
-                }]
-              }
-            }
-          });
-        })
+      // index.loadPrices()
+      //   .then(prices => index.plot('initial_plot', prices))
     </script>
   </figure>
 
   <h2>Regression</h2>
   <!-- 25% <p>Several regressions of the data were correctly performed and are presented. Logical and complete reasons for best choice are given including long- and short-run behavior and limitations.</p> -->
+
+  <textarea id="regression_in" class="nice_input">((a * x) + b)</textarea>
+  <textarea id="regression_out" class="nice_input" disabled></textarea>
+  <br>
+  <canvas id="regression_graph"></canvas>
+
+  <script>
+    index.loadPrices().then(prices => {
+      const regression_in = document.getElementById('regression_in')
+      const regression_out = document.getElementById('regression_out')
+
+      function regress() {
+        let exp
+        try {
+          exp = index.parse_lisp(regression_in.value)
+          fit = index.fit(exp, prices)
+          regression_out.value = index.dump_lisp(fit)
+        } catch (e) {
+          console.log(e)
+          regression_out.value = e
+        }
+      }
+
+      regression_in.onkeyup =
+        regression_in.click =
+        regression_in.onchange = regress
+
+      regress()
+
+    })
+  </script>
 
   <h2>Conclusion</h2>
   <!-- 25% <p>Results of data and regression calculations correctly interpreted. Shortcoming of the method are addressed and limitations of choices discussed.</p> -->
