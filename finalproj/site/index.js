@@ -24,7 +24,7 @@ function min(ls, f) {
 
 // run f 
 function optimize1(f, currentx, currenty, step_exponent) {
-  if (step_exponent < -20) {
+  if (step_exponent < (-10)) {
     return currentx
   }
   const xUp = currentx + 2 ** step_exponent
@@ -40,7 +40,7 @@ function optimize1(f, currentx, currenty, step_exponent) {
 }
 
 function optimize(f) {
-  return optimize1(f, 0, f(0), 20)
+  return optimize1(f, 1, f(1), 10)
 }
 
 const binary_operators = {
@@ -105,7 +105,8 @@ module.exports = {
   plot: function(canvasId, prices, regression) {
     const datasets = [{
       label: 'Source Data',
-      data: prices
+      data: prices,
+      fill: false
     }]
 
     if (regression !== undefined) {
@@ -116,7 +117,8 @@ module.exports = {
             x: a.x,
             y: regression(a.y)
           }
-        })
+        }),
+        fill: false
       })
     }
 
@@ -141,12 +143,19 @@ module.exports = {
             }
           }],
           yAxes: [{
+            type: 'linear',
             display: true,
             scaleLabel: {
               display: true,
               labelString: 'Average Price in Thousands of Dollars'
             }
           }]
+        },
+        animation : false,
+        elements: {
+          point: {
+            radius: 0
+          }
         }
       }
     })
@@ -182,6 +191,12 @@ module.exports = {
       a,
       b,
       c
+    })
+  },
+
+  toFunction: function(exp) {
+    return x => apply(exp, {
+      x
     })
   }
 }
