@@ -1,20 +1,19 @@
 
-function optimize(f, numTunables) {
-  // [0 for _ in range(numTunables)]
-  let tunables = Array.from(Array(numTunables).keys()).map(_ => 0)
+function optimize(f, net) {
+  const ks = Object.keys(net)
 
-  for (let c = 0; c < 10000; c++) {
-    for (let i = 0; i < tunables.length; i++) {
-      const s = tunables[i]
-      const m = min([0.001, 0, -0.001], a => {
-        tunables[i] = s + a
-        return f(tunables)
+  for (let c = 0; c < 1000; c++) {
+    for (k of ks) {
+      const s = net[k]
+      const m = min([0.01, 0, -0.01], a => {
+        net[k] = s + a
+        return f(net)
       })
-      tunables[i] = s + m
+      net[k] = s + m
     }
   }
 
-  return tunables
+  return net
 }
 
 

@@ -29,16 +29,18 @@ module.exports = {
 
   fit: function(exp, prices) {
     const unbound = expression.unboundVariables(exp).filter(v => v !== 'x')
+    const net = toObject(unbound)
 
-    const values = regression.optimize(unboundValues => {
-      let dict = zipToObject(unbound, unboundValues)
+    const values = regression.optimize(dict => {
       return utility(x => {
         dict.x = x
         return expression.apply(exp, dict)
       }, prices)
-    }, unbound.length)
+    }, net)
 
-    return expression.replace(exp, zipToObject(unbound, values))
+    delete values.x
+    const newExpr = expression.replace(exp, values)
+    return expression.mapNumbers(newExpr, n => round(n, 2))
   },
 
   toFunction: function(exp) {
@@ -56,6 +58,14 @@ function zipToObject(keys, values) {
   return a
 }
 
+function toObject(keys) {
+  let a = {}
+  keys.forEach(k => {
+    a[k] = 0
+  })
+  return a
+}
+
 
 function utility(f, prices) {
   return prices
@@ -63,3 +73,10 @@ function utility(f, prices) {
     .map(a => a * a) // square
     .reduce((a, b) => a + b) // sum
 }
+
+function round(number, precision) {
+    const factor = Math.pow(10, precision);
+    const tempNumber = number * factor;
+    const roundedTempNumber = Math.round(tempNumber);
+    return roundedTempNumber / factor;
+};

@@ -74,9 +74,20 @@ function unboundVariables(exp) {
   throw "Cannot apply " + dump_lisp(exp) + ' using ' + JSON.stringify(dict)
 }
 
+function mapNumbers(exp, f) {
+  if (typeof exp === 'number') {
+    return f(exp)
+  } else if (typeof exp === 'string') {
+    return exp
+  } else {
+    return exp.map(e => mapNumbers(e, f))
+  }
+}
+
 module.exports = {
   dump_lisp,
   apply,
   replace,
-  unboundVariables
+  unboundVariables,
+  mapNumbers
 }
