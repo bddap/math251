@@ -2,7 +2,7 @@ const Chart = require('chart.js')
 const elparser = require('elparser')
 const regression = require('./regression')
 const expression = require('./expression')
-const plot = require('./plot');
+const plot = require('./plot')
 
 module.exports = {
   fillTable: function(table, tds) {

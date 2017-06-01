@@ -97,7 +97,7 @@
   <h2>Regression</h2>
   <!-- 25% <p>Several regressions of the data were correctly performed and are presented. Logical and complete reasons for best choice are given including long- and short-run behavior and limitations.</p> -->
 
-  <textarea id="regression_in" class="nice_input">((b * x) + a)</textarea>
+  <textarea id="regression_in" class="nice_input">((x - (a + 1975)) * b)</textarea>
   <textarea id="regression_out" class="nice_input" disabled></textarea>
   <br>
   <canvas id="regression_graph"></canvas>
@@ -113,18 +113,18 @@
           exp = index.parse_lisp(regression_in.value)
           fit = index.fit(exp, prices)
           regression_out.value = index.dump_lisp(fit)
-          
+
           index.plot('regression_graph', prices, index.toFunction(fit))
         } catch (e) {
           console.log(e)
           regression_out.value = e
         }
-        
+
       }
 
-      regression_in.onkeyup =
-        regression_in.click =
-        regression_in.onchange = regress
+      // regression_in.onkeyup =
+      // regression_in.click =
+      regression_in.onchange = regress
 
       regress()
 

@@ -11,7 +11,7 @@ module.exports = function(canvasId, prices, regression) {
       data: prices.map(a => {
         return {
           x: a.x,
-          y: regression(a.y)
+          y: regression(a.x)
         }
       }),
       fill: false
