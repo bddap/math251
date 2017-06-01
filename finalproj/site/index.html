@@ -102,32 +102,44 @@
   <br>
   <canvas id="regression_graph"></canvas>
 
+  <p>Sugestions:</p>
+  <p>(((sin ((x / c) + d)) * (300 / e)) + ((x - (a + 1975)) * b))</p>
+  <p>((x - (a + 1975)) * b)</p>
+
   <script>
     index.loadPrices().then(prices => {
       const regression_in = document.getElementById('regression_in')
       const regression_out = document.getElementById('regression_out')
 
-      function regress() {
-        let exp
+      let exp = undefined
+      let net = undefined
+
+      function setOriginal() {
         try {
           exp = index.parse_lisp(regression_in.value)
-          fit = index.fit(exp, prices)
-          regression_out.value = index.dump_lisp(fit)
-
-          index.plot('regression_graph', prices, index.toFunction(fit))
         } catch (e) {
           console.log(e)
-          regression_out.value = e
+          exp = 'x'
         }
-
+        net = undefined
       }
 
-      // regression_in.onkeyup =
-      // regression_in.click =
-      regression_in.onchange = regress
+      function regress() {
+        net = index.fit(exp, net, prices)
+        const boundExp = index.expression.replace(exp, net)
+        regression_out.value = index.expression.prettyPrint(boundExp)
+        index.plot('regression_graph', prices, index.toFunction(boundExp, net))
+        setTimeout(regress, 0)
+      }
 
+      regression_in.onkeyup =
+        regression_in.onclick =
+        regression_in.onchange = setOriginal
+
+      regression_out.onclick = regress
+
+      setOriginal()
       regress()
-
     })
   </script>
 

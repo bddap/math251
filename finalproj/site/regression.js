@@ -2,7 +2,7 @@
 function optimize(f, net) {
   const ks = Object.keys(net)
 
-  for (let c = 0; c < 1000; c++) {
+  for (let c = 0; c < 10; c++) {
     for (k of ks) {
       const s = net[k]
       const m = min([0.01, 0, -0.01], a => {

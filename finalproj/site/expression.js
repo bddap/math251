@@ -84,10 +84,24 @@ function mapNumbers(exp, f) {
   }
 }
 
+function round(number, precision) {
+  const factor = Math.pow(10, precision);
+  const tempNumber = number * factor;
+  const roundedTempNumber = Math.round(tempNumber);
+  return roundedTempNumber / factor;
+}
+
+function prettyPrint(expr) {
+  return dump_lisp(
+    mapNumbers(expr, n => round(n, 2))
+  )
+}
+
 module.exports = {
   dump_lisp,
   apply,
   replace,
   unboundVariables,
-  mapNumbers
+  mapNumbers,
+  prettyPrint
 }

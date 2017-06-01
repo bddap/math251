@@ -26,10 +26,11 @@ module.exports = {
   },
 
   dump_lisp: expression.dump_lisp,
+  expression,
 
-  fit: function(exp, prices) {
+  fit: function(exp, netw, prices) {
     const unbound = expression.unboundVariables(exp).filter(v => v !== 'x')
-    const net = toObject(unbound)
+    const net = (netw === undefined) ? toObject(unbound) : netw
 
     const values = regression.optimize(dict => {
       return utility(x => {
@@ -39,8 +40,10 @@ module.exports = {
     }, net)
 
     delete values.x
-    const newExpr = expression.replace(exp, values)
-    return expression.mapNumbers(newExpr, n => round(n, 2))
+    return values
+
+    // const newExpr = expression.replace(exp, values)
+    // return expression.mapNumbers(newExpr, n => round(n, 2))
   },
 
   toFunction: function(exp) {
@@ -66,17 +69,9 @@ function toObject(keys) {
   return a
 }
 
-
 function utility(f, prices) {
   return prices
     .map(p => p.y - f(p.x)) // distance
     .map(a => a * a) // square
     .reduce((a, b) => a + b) // sum
 }
-
-function round(number, precision) {
-    const factor = Math.pow(10, precision);
-    const tempNumber = number * factor;
-    const roundedTempNumber = Math.round(tempNumber);
-    return roundedTempNumber / factor;
-};
