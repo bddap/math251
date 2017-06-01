@@ -35,6 +35,10 @@
       font-size: inherit;
       resize: none;
     }
+
+    input[type="checkbox"] {
+       margin: 1rem;
+    }
   </style>
 
   <script src="index.js"></script>
@@ -97,8 +101,15 @@
   <h2>Regression</h2>
   <!-- 25% <p>Several regressions of the data were correctly performed and are presented. Logical and complete reasons for best choice are given including long- and short-run behavior and limitations.</p> -->
 
-  <textarea id="regression_in" class="nice_input">((x - (a + 1975)) * b)</textarea>
-  <textarea id="regression_out" class="nice_input" disabled></textarea>
+  <p>
+
+  </p>
+
+  <div style="display: flex;">
+    <textarea style="flex: 1;" id="regression_in" class="nice_input">((x - (a + 1975)) * b)</textarea>
+    <textarea style="flex: 1;" id="regression_out" class="nice_input" disabled></textarea>
+  </div>
+  <input id="regression_do" type="checkbox" value="">Start</input>
   <br>
   <canvas id="regression_graph"></canvas>
 
@@ -110,6 +121,7 @@
     index.loadPrices().then(prices => {
       const regression_in = document.getElementById('regression_in')
       const regression_out = document.getElementById('regression_out')
+      const regression_do = document.getElementById('regression_do')
 
       let exp = undefined
       let net = undefined
@@ -122,6 +134,7 @@
           exp = 'x'
         }
         net = undefined
+        regression_out.value = index.expression.prettyPrint(exp)
       }
 
       function regress() {
@@ -129,17 +142,20 @@
         const boundExp = index.expression.replace(exp, net)
         regression_out.value = index.expression.prettyPrint(boundExp)
         index.plot('regression_graph', prices, index.toFunction(boundExp, net))
-        setTimeout(regress, 0)
+        maybeRegress()
+      }
+
+      function maybeRegress() {
+        if (regression_do.checked === true) {
+          requestAnimationFrame(regress)
+        }
       }
 
       regression_in.onkeyup =
-        regression_in.onclick =
         regression_in.onchange = setOriginal
 
-      regression_out.onclick = regress
-
       setOriginal()
-      regress()
+      regression_do.onchange = maybeRegress
     })
   </script>
 
