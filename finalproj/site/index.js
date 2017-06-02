@@ -70,8 +70,10 @@ function toObject(keys) {
 }
 
 function utility(f, prices) {
-  return prices
-    .map(p => p.y - f(p.x)) // distance
-    .map(a => a * a) // square
-    .reduce((a, b) => a + b) // sum
+  let sum = 0;
+  for (var i = 0; i < prices.length; i++) {
+    const d = prices[i].y - f(prices[i].x)
+    sum += d * d
+  }
+  return sum / prices.length;
 }

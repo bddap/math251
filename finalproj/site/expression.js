@@ -12,7 +12,8 @@ const binary_operators = {
   '*': (a, b) => a * b,
   '/': (a, b) => a / b,
   '+': (a, b) => a + b,
-  '-': (a, b) => a - b
+  '-': (a, b) => a - b,
+  '**': (a, b) => Math.pow(a, b)
 }
 
 const unary_operators = {
@@ -21,17 +22,17 @@ const unary_operators = {
 }
 
 function apply(exp, dict) {
-  if (dict.hasOwnProperty(exp)) {
+  if (typeof exp === 'string') {
     return dict[exp]
-  }
-  if (typeof exp === 'number') {
-    return exp
   }
   if (exp.length === 3) {
     return binary_operators[exp[1]](apply(exp[0], dict), apply(exp[2], dict))
   }
   if (exp.length === 2) {
     return unary_operators[exp[0]](apply(exp[1], dict))
+  }
+  if (typeof exp === 'number') {
+    return exp
   }
   throw "Cannot apply " + dump_lisp(exp) + ' using ' + JSON.stringify(dict)
 }
@@ -93,7 +94,7 @@ function round(number, precision) {
 
 function prettyPrint(expr) {
   return dump_lisp(
-    mapNumbers(expr, n => round(n, 2))
+    mapNumbers(expr, n => round(n, 4))
   )
 }
 

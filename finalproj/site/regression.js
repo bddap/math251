@@ -1,11 +1,12 @@
-
 function optimize(f, net) {
   const ks = Object.keys(net)
 
-  for (let c = 0; c < 10; c++) {
+  const step = f(net) / 100000
+
+  for (let c = 0; c < 100; c++) {
     for (k of ks) {
       const s = net[k]
-      const m = min([0.01, 0, -0.01], a => {
+      const m = min([0, 1 * step, -1 * step], a => {
         net[k] = s + a
         return f(net)
       })

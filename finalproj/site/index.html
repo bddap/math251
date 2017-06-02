@@ -37,7 +37,7 @@
     }
 
     input[type="checkbox"] {
-       margin: 1rem;
+      margin: 1rem;
     }
   </style>
 
@@ -101,9 +101,7 @@
   <h2>Regression</h2>
   <!-- 25% <p>Several regressions of the data were correctly performed and are presented. Logical and complete reasons for best choice are given including long- and short-run behavior and limitations.</p> -->
 
-  <p>
-
-  </p>
+  <p>Displayed below is a gradient decent based regression runner. It's input is a lispy expression. It tries to fit that expression to our pricing data.</p>
 
   <div style="display: flex;">
     <textarea style="flex: 1;" id="regression_in" class="nice_input">((x - (a + 1975)) * b)</textarea>
@@ -112,10 +110,6 @@
   <input id="regression_do" type="checkbox" value="">Start</input>
   <br>
   <canvas id="regression_graph"></canvas>
-
-  <p>Sugestions:</p>
-  <p>(((sin ((x / c) + d)) * (300 / e)) + ((x - (a + 1975)) * b))</p>
-  <p>((x - (a + 1975)) * b)</p>
 
   <script>
     index.loadPrices().then(prices => {
@@ -151,13 +145,33 @@
         }
       }
 
-      regression_in.onkeyup =
-        regression_in.onchange = setOriginal
+      regression_in.onchange = setOriginal
 
       setOriginal()
       regression_do.onchange = maybeRegress
     })
   </script>
+
+  <h3>Linear</h3>
+  <p>((x - (a + 1975)) * b)</p>
+  <!-- ((x - (-1.6963 + 1975)) * 10.0708) -->
+
+  <p>This expression describes a general trend in Oregon housing. Let's use it as a base for our future regressions.</p>
+
+  <h3>Linear + Cyclical</h3>
+  <p>(((x - (a + 1975)) * b) + ((sin ((x * c) + d)) * e))</p>
+  <!-- (((x - (-1.1794 + 1975)) * 10.2682) + ((sin ((x * -0.6878) + -0.1417)) * 21.7296)) -->
+
+  <p>
+    I hear often that the housing market follows a cycle. From the graph I would guess it has a period of 7 years. The regression seems to dissagree. The regression insists on a much longer period. This function does have some issues. It assumes a constant
+    phase. If the market cycle gets out of phase, the predictions from this model will get out of whack. This function does fit most of the graph, just not the last few years, or the first few.
+  </p>
+
+  <h3>Linear + Cyclical with modified phase.</h3>
+  <p>In the previous graph, the period works only at the end. Let's make period vary with time.</p>
+  <p>
+    (((x - (a + 1975)) * b) + ((sin (((x * c) + d) ** (2 + f))) * e))
+  </p>
 
   <h2>Conclusion</h2>
   <!-- 25% <p>Results of data and regression calculations correctly interpreted. Shortcoming of the method are addressed and limitations of choices discussed.</p> -->
