@@ -170,11 +170,22 @@
   <h3>Linear + Cyclical with modified phase.</h3>
   <p>In the previous graph, the period works only at the end. Let's make period vary with time.</p>
   <p>
-    (((x - (a + 1975)) * b) + ((sin (((x * c) + d) ** (2 + f))) * e))
+    (((x - (a + 1975)) * b) + ((sin (((x * c) + d) ** 2)) * e))
   </p>
+  <p>Meh, that just yeilds a linear function.</p>
+
+  <h3>Polynomial</h3>
+  <p>((a * x) + ((b * (x ** 2)) + ((c * (x ** 3)) + ((d * (x ** 4))))))</p>
+  <p>This one is just for fun. A polynomial is probably not better than a linear function.</p>
+  <p>ax + bx^2 + cx^3 + dx^4 = (x * (a + (x * (b + (x * (c + (d * x)))))))</p>
+  <p>Let's translate the polynomial to start where our data starts.</p>
+  <p>((x - 1975) * (a + ((x - 1975) * (b + ((x - 1975) * (c + (d * (x - 1975))))))))</p>
 
   <h2>Conclusion</h2>
   <!-- 25% <p>Results of data and regression calculations correctly interpreted. Shortcoming of the method are addressed and limitations of choices discussed.</p> -->
+  <p>The best results came from the linear function, and the Linear + Cyclical model. The data seems somewhat random, but with an upward trend.</p>
+  <p>It could just be my imagination, but there seem to be occilations in the data. It seems like the data occilates with low frequency and small amplitude at the beginning. As time increases, so do amplitude and frequency.</p>
+  <p>While the regression method used doesn't always find the optimal fit for a curve. This is because it uses a wierd brute force gradient decent algorithm. The search can sometimes get stuck at a local minima.</p>
 
   <!-- <p>Grade Calculated (Max is 95% plus up to 5pts for Wow! Points) using the following formula: 50 + 3.75*(Intro+Data+Domain+Incresaing)+WowPoints</p> -->
 
