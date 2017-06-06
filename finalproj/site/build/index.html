@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Housing</title>
+  <style media="screen">
+    html {
+      font-family: sans-serif;
+    }
+
+    body {
+      margin: 5vw;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 0.2rem solid black;
+      padding: 0.3rem;
+    }
+
+    figcaption {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .nice_input {
+      min-height: 5em;
+      padding: 1em;
+      font-size: inherit;
+      resize: none;
+    }
+
+    input[type="checkbox"] {
+      margin: 1rem;
+    }
+  </style>
+
+  <script src="index.js"></script>
+  <script>
+    const index = require('index')
+    const Chart = require('chart.js')
+  </script>
+</head>
+
+<body>
+  <h2>Math 251 Project Presentation</h2>
+  <!-- <p>Slope of a secant lines for a data set compared to the derivative of a regression of the data set</p> -->
+
+  <h2>Introduction</h2>
+  <!--25% <p>Clear description of the topic and data including units/scale. How it was chosen and a clear and compelling description of why it was chosen.</p> -->
+
+  <p>This project examines Oregon home pricing data from <a href="https://catalog.data.gov/dataset/fhfa-house-price-indexes-hpis">data.gov</a>. I chose this topic because my wife and I want to buy a house sometime. Ideally we want to buy when prices are
+    at a local minima. Perhaps this dataset will provide some useful insight.</p>
+
+  <p>data.gov provides HPI for the whole Nation. Only Oregon housing info is shown in this report.</p>
+
+  <p>The data is arranged such that the x axis represents year, and the y axis represents average home price in thousands.</p>
+
+  <h2>Presentation of Data</h2>
+  <!-- 25% <p>Data is presented in table and graphic form following the Writing Guidelines including appropriate scales/column headings, units and fig. reference notation. Slope of secant line correctly found for at least one point.</p> -->
+
+  <!-- Data is presented in table -->
+  <figure>
+    <figcaption>
+      Figure 1.1.1. HPI Data as a Table.
+      <button onclick="
+        e = document.getElementById('data_table');
+        e.hidden = !e.hidden;
+        this.innerText = (e.hidden ? 'Show' : 'Hide')
+      ">Show</button>
+    </figcaption>
+    <table hidden id="data_table">
+      <th>Year</th>
+      <th>Average Price in Thousands of Dollars</th>
+    </table>
+    <script>
+      index.loadPrices()
+        .then(prices => index.fillTable(
+          document.getElementById('data_table'),
+          prices.map(p => [p.x, p.y])
+        ))
+    </script>
+  </figure>
+
+  <!-- and graphic form -->
+  <figure>
+    <figcaption>Figure 1.1.2. HPI Data as a Graph.</figcaption>
+    <canvas hidden id="initial_plot"></canvas>
+    <script>
+      // index.loadPrices()
+      //   .then(prices => index.plot('initial_plot', prices))
+    </script>
+  </figure>
+
+  <h2>Regression</h2>
+  <!-- 25% <p>Several regressions of the data were correctly performed and are presented. Logical and complete reasons for best choice are given including long- and short-run behavior and limitations.</p> -->
+
+  <p>Displayed below is a gradient decent based regression runner. It's input is a lispy expression. It tries to fit that expression to our pricing data.</p>
+
+  <div style="display: flex;">
+    <textarea style="flex: 1;" id="regression_in" class="nice_input">((x - (a + 1975)) * b)</textarea>
+    <textarea style="flex: 1;" id="regression_out" class="nice_input" disabled></textarea>
+  </div>
+  <input id="regression_do" type="checkbox" value="">Start</input>
+  <br>
+  <canvas id="regression_graph"></canvas>
+
+  <script>
+    index.loadPrices().then(prices => {
+      const regression_in = document.getElementById('regression_in')
+      const regression_out = document.getElementById('regression_out')
+      const regression_do = document.getElementById('regression_do')
+
+      let exp = undefined
+      let net = undefined
+
+      function setOriginal() {
+        try {
+          exp = index.parse_lisp(regression_in.value)
+        } catch (e) {
+          console.log(e)
+          exp = 'x'
+        }
+        net = undefined
+        regression_out.value = index.expression.prettyPrint(exp)
+      }
+
+      function regress() {
+        net = index.fit(exp, net, prices)
+        const boundExp = index.expression.replace(exp, net)
+        regression_out.value = index.expression.prettyPrint(boundExp)
+        index.plot('regression_graph', prices, index.toFunction(boundExp, net))
+        maybeRegress()
+      }
+
+      function maybeRegress() {
+        if (regression_do.checked === true) {
+          requestAnimationFrame(regress)
+        }
+      }
+
+      regression_in.onchange = setOriginal
+
+      setOriginal()
+      regression_do.onchange = maybeRegress
+    })
+  </script>
+
+  <h3>Linear</h3>
+  <p>((x - (a + 1975)) * b)</p>
+  <!-- ((x - (-1.6963 + 1975)) * 10.0708) -->
+
+  <p>This expression describes a general trend in Oregon housing. Let's use it as a base for our future regressions.</p>
+
+  <h3>Linear + Cyclical</h3>
+  <p>(((x - (a + 1975)) * b) + ((sin ((x * c) + d)) * e))</p>
+  <!-- (((x - (-1.1794 + 1975)) * 10.2682) + ((sin ((x * -0.6878) + -0.1417)) * 21.7296)) -->
+
+  <p>
+    I hear often that the housing market follows a cycle. From the graph I would guess it has a period of 7 years. The regression seems to dissagree. The regression insists on a much longer period. This function does have some issues. It assumes a constant
+    phase. If the market cycle gets out of phase, the predictions from this model will get out of whack. This function does fit most of the graph, just not the last few years, or the first few.
+  </p>
+
+  <h3>Linear + Cyclical with modified phase.</h3>
+  <p>In the previous graph, the period works only at the end. Let's make period vary with time.</p>
+  <p>
+    (((x - (a + 1975)) * b) + ((sin (((x * c) + d) ** 2)) * e))
+  </p>
+  <p>Meh, that just yeilds a linear function.</p>
+
+  <h3>Polynomial</h3>
+  <p>((a * x) + ((b * (x ** 2)) + ((c * (x ** 3)) + ((d * (x ** 4))))))</p>
+  <p>This one is just for fun. A polynomial is probably not better than a linear function.</p>
+  <p>ax + bx^2 + cx^3 + dx^4 = (x * (a + (x * (b + (x * (c + (d * x)))))))</p>
+  <p>Let's translate the polynomial to start where our data starts.</p>
+  <p>((x - 1975) * (a + ((x - 1975) * (b + ((x - 1975) * (c + (d * (x - 1975))))))))</p>
+
+  <h2>Conclusion</h2>
+  <!-- 25% <p>Results of data and regression calculations correctly interpreted. Shortcoming of the method are addressed and limitations of choices discussed.</p> -->
+  <p>The best results came from the linear function, and the Linear + Cyclical model. The data seems somewhat random, but with an upward trend.</p>
+  <p>It could just be my imagination, but there seem to be occilations in the data. It seems like the data occilates with low frequency and small amplitude at the beginning. As time increases, so do amplitude and frequency.</p>
+  <p>While the regression method used doesn't always find the optimal fit for a curve. This is because it uses a wierd brute force gradient decent algorithm. The search can sometimes get stuck at a local minima.</p>
+
+  <!-- <p>Grade Calculated (Max is 95% plus up to 5pts for Wow! Points) using the following formula: 50 + 3.75*(Intro+Data+Domain+Incresaing)+WowPoints</p> -->
+
+</body>
+
+</html>
